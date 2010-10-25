@@ -1,0 +1,50 @@
+#lang racket
+
+
+(define (square x) (* x x))
+(square 4)
+
+(define (good-enough? guess x) (< (abs (- (square guess) x)) 0.001 ) )
+
+(define (average x y) (/ (+ x y) 2))
+
+(define (improve guess x) (average guess (/ x guess))) 
+
+(define (sqrt-iter guess x)
+  (if (good-enough? guess x)
+    guess
+    (sqrt-iter (improve guess x)
+                x))) 
+
+
+;(sqrt-iter guess x)
+(sqrt-iter 1 16)
+(sqrt-iter 1 1)
+(sqrt-iter 1 0.5)
+(sqrt-iter 1 0.25)
+(sqrt-iter 1 0.1)
+(sqrt-iter 1 0.01)
+(sqrt-iter 1 0.001) ; %70 error
+
+(define (error guess accurate) (abs (/ (- guess accurate) accurate ) ) )
+(define (good-enough2? guess accurate) (< (error (square guess) accurate) 0.01) )
+(define (sqrt2-iter guess x)
+  (if (good-enough2? guess x) 
+    guess
+    (sqrt2-iter (improve guess x)
+                x))) 
+(error 99 100) ;returns 0.01 1% error
+(error 101 100) ;returns 0.01 1% error
+(good-enough2? 1.4   2)
+(good-enough2? 1.41  2)
+(good-enough2? 1.414 2)
+(sqrt2-iter 1 2.0); enter real answer will be real and not rational
+(sqrt2-iter 1 0.1)
+(sqrt2-iter 1 0.01)
+(sqrt2-iter 1 0.001) ; %1.4 error
+(sqrt2-iter 1 900.0)
+
+;The new method gives a fixed percentage arror so for large numbers 
+; this is a larger overall error.
+;The original method specified afixed resolution which was no good 
+; as the aswer came close to this resolution.

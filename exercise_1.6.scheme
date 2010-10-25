@@ -1,0 +1,42 @@
+#lang racket
+
+(define (new-if predicate then-clause else-clause) 
+  (cond (predicate then-clause)
+        (else else-clause)))
+
+(new-if (= 2 3) 0 5)
+(new-if (= 1 1) 0 5)
+
+(new-if (= 1 1) (+ 1 2 3) 0)
+
+(define (square x) (* x x))
+
+(define (good-enough? guess x)
+(< (abs (- (square guess) x)) 0.001))
+
+(define (average x y) (/ (+ x y) 2))
+
+(define (improve guess x) (average guess (/ x guess))) 
+
+
+(define (sqrtn-iter guess x)
+  (new-if (good-enough? guess x)
+    guess
+    (sqrtn-iter (improve guess x)
+                x))) 
+
+(define (sqrt-iter guess x)
+  (if (good-enough? guess x)
+    guess
+    (sqrt-iter (improve guess x)
+                x)))
+
+(sqrt-iter 1 2)
+(sqrtn-iter 1 2)
+
+;Results seem to be the same with standard if and user space created function
+;the only difference I can think of is the evaluative order
+;if the compiler/execution does not know it is a special instruction then it can not be interpreteded correctly.
+
+;Had not updated the recursion to call the correct function in sqrtn-iter, which does hit 100% cpu as it tries to take all branches first, before evaluating which brnches to take.
+
