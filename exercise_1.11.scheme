@@ -1,0 +1,24 @@
+#lang racket
+
+;f(n) = n if n<3
+;f(n) = f(n - 1) + 2f(n - 2) + 3f(n - 3) if n>= 3.
+
+;Recursive
+(define (funct n) (if (< n 3) 
+                      n 
+                      (+ 
+                        (funct (- n 1))
+                        (* 2 (funct (- n 2)))
+                        (* 3 (funct (- n 3)))
+                      )
+                  )
+                )
+
+(funct 2)
+(funct 4)
+
+;tabulation or memoization would speed up Recursive algo but not make it iterative.
+
+;Iterative
+;Currently do not see how to make this iterative
+
